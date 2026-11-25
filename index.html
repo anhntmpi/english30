@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="English 30">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#1e3a8a">
+<title>English 30'</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"Segoe UI",Arial,sans-serif;background:#f1f5f9;color:#1f2937;font-size:15px;line-height:1.45;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+header{background:#1e3a8a;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
+header h1{font-size:19px}
+header div{font-size:13px;opacity:.85}
+main{padding:12px}
+section[hidden]{display:none}
+.card{background:#fff;border-radius:12px;padding:12px;margin-bottom:12px;box-shadow:0 1px 3px #0001}
+.card h2{font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.card h3{font-size:14px;margin:10px 0 6px;color:#1e3a8a}
+.muted{color:#64748b;font-size:13px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px}
+.week div{text-align:center;font-size:11px;padding:6px 0;border-radius:8px;background:#fff;color:#64748b}
+.week div b{display:block;font-size:13px;color:#1f2937}
+.week div.on{background:#1e3a8a;color:#dbeafe}.week div.on b{color:#fff}
+.tag{display:inline-block;padding:1px 9px;border-radius:10px;font-size:12px;font-weight:700;color:#fff}
+.r{background:#0ea5e9}.l{background:#10b981}.s{background:#ef4444}.c{background:#f97316}.o{background:#8b5cf6}.x{background:#94a3b8}
+.step{display:flex;gap:10px;padding:8px 0;border-top:1px solid #f1f5f9;align-items:flex-start}
+.step input{width:22px;height:22px;flex:0 0 22px;margin-top:1px;accent-color:#1e3a8a}
+.step .t{flex:0 0 44px;font-weight:700;font-size:13px;color:#1e3a8a;padding-top:2px}
+.step.done .txt{color:#94a3b8;text-decoration:line-through}
+.kw{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:#eff6ff;border-radius:8px;padding:7px 10px;font-size:14px;margin-bottom:4px}
+.kw b{background:#1e3a8a;color:#fff;padding:1px 8px;border-radius:6px}
+.prompt{background:#f8fafc;border:1px dashed #94a3b8;border-radius:8px;padding:8px;font-size:12.5px;white-space:pre-wrap;max-height:130px;overflow:auto;margin-top:6px;color:#334155}
+.row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+button,.btn{font:inherit;font-size:14px;font-weight:600;border:0;border-radius:9px;padding:9px 14px;background:#1e3a8a;color:#fff;text-decoration:none;display:inline-block;text-align:center}
+button.ghost,.btn.ghost{background:#e2e8f0;color:#1f2937}
+button.ok{background:#16a34a}button.no{background:#e2e8f0;color:#b91c1c}
+button.sm{padding:5px 10px;font-size:13px}
+button.danger{background:#fee2e2;color:#b91c1c}
+input[type=text],input[type=search],textarea,select{font:inherit;font-size:16px;width:100%;border:1px solid #cbd5e1;border-radius:8px;padding:8px 10px;background:#fff;margin-top:6px}
+textarea{min-height:56px;resize:vertical}
+label.f{display:block;font-size:13px;color:#475569;margin-top:8px}
+.seg{display:flex;background:#e2e8f0;border-radius:9px;padding:3px;gap:3px;margin-bottom:10px;overflow-x:auto}
+.seg button{flex:1;background:transparent;color:#334155;padding:7px 6px;font-size:13px;white-space:nowrap}
+.seg button.on{background:#fff;color:#1e3a8a;box-shadow:0 1px 2px #0002}
+.chunk{background:#fff;border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:0 1px 2px #0001;border-left:4px solid #94a3b8}
+.chunk.R{border-left-color:#0ea5e9}.chunk.L{border-left-color:#10b981}
+.chunk .ct{font-weight:700;font-size:16px}
+.chunk .cf{font-size:13px;color:#475569}
+.chunk .ce{font-size:13px;color:#334155;font-style:italic;margin-top:2px}
+.chunk .meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:12px;color:#64748b}
+.hide{background:#e2e8f0;border-radius:8px;padding:10px;text-align:center;color:#475569;font-weight:600;margin:6px 0}
+.badge{font-size:12px;font-weight:700;padding:1px 8px;border-radius:10px;background:#e2e8f0;color:#334155}
+.badge.m{background:#dcfce7;color:#166534}
+.empty{text-align:center;color:#64748b;padding:24px 8px;font-size:14px}
+.tip{background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;font-size:13px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.stats div{background:#f8fafc;border-radius:8px;padding:8px}
+.stats b{display:block;font-size:20px;color:#1e3a8a}
+ul.list{padding-left:18px;font-size:14px}ul.list li{margin:3px 0}
+nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav button{background:none;color:#64748b;border-radius:0;padding:8px 0 6px;font-size:11px;font-weight:600}
+nav button span{display:block;font-size:20px}
+nav button.on{color:#1e3a8a}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#111827;color:#fff;padding:8px 14px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;max-width:90%;text-align:center}
+#toast.on{opacity:1}
+</style></head><body>
+<header><h1>English 30'</h1><div id="hdSub"></div></header>
+<main>
+<section id="tab-today"></section>
+<section id="tab-recall" hidden></section>
+<section id="tab-chunks" hidden></section>
+<section id="tab-more" hidden></section>
+</main>
+<nav>
+<button data-tab="today" class="on"><span>📅</span>Hôm nay</button>
+<button data-tab="recall"><span>🧠</span>Ôn tập</button>
+<button data-tab="chunks"><span>📚</span>Chunks</button>
+<button data-tab="more"><span>⚙️</span>Thêm</button>
+</nav>
+<div id="toast"></div>
+<input type="file" id="importFile" accept=".json,application/json" hidden>
+<script>
+"use strict";
+// ---------- Lưu trữ ----------
+const KEY = "english30-v1";
+let S = load();
+function load(){
+  try{ const d = JSON.parse(localStorage.getItem(KEY)); if(d && Array.isArray(d.chunks)) return migrate(d); }catch(e){}
+  return {chunks:[], log:{}, mistakes:[]};
+}
+// Chuyển dữ liệu cũ (đếm số lần bấm) sang dữ liệu mới (đếm số ngày dùng + lịch ôn)
+function migrate(d){
+  d = Object.assign({log:{}, mistakes:[]}, d);
+  d.chunks.forEach(c=>{
+    if(!Array.isArray(c.useDays)){ c.useDays = (c.uses>0 && c.last) ? [c.last] : []; delete c.uses; }
+    c.mastered = c.useDays.length >= 3;
+    if(!c.due){ const base = c.useDays[c.useDays.length-1] || c.date, x = new Date(base+"T00:00"); x.setDate(x.getDate()+1);
+      c.due = `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}-${String(x.getDate()).padStart(2,"0")}`; }
+  });
+  return d;
+}
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); }
+if(navigator.storage && navigator.storage.persist) navigator.storage.persist();
+
+// ---------- Tiện ích ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const TODAY = () => ymd(new Date());
+function mondayOf(d){ const x = new Date(d); const k = (x.getDay()+6)%7; x.setDate(x.getDate()-k); return x; }
+const DAYN = ["CN","T2","T3","T4","T5","T6","T7"];
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("on"),1800); }
+async function copy(text){
+  try{ await navigator.clipboard.writeText(text); }
+  catch(e){ const a=document.createElement("textarea"); a.value=text; document.body.appendChild(a); a.select(); document.execCommand("copy"); a.remove(); }
+  toast("Đã copy. Mở ChatGPT và dán vào.");
+}
+function dayLog(date){ return S.log[date] || (S.log[date] = {topic:"", done:{}}); }
+function addDays(s, n){ const d = new Date(s+"T00:00"); d.setDate(d.getDate()+n); return ymd(d); }
+
+// ---------- Ghi nhớ theo ngày + lịch ôn 1 → 3 → 7 ngày ----------
+const MASTER_DAYS = 3, NEXT = [1,3,7], KEEP = 30;   // thuộc rồi: 30 ngày sau ôn lại 1 lần
+const LIMIT_INPUT = 3, LIMIT_SPEAK = 1;             // tối đa mỗi ngày
+function useChunk(c){
+  const t = TODAY(); c.useDays = c.useDays || [];
+  if(c.useDays.includes(t)){ toast("Hôm nay đã tính rồi. Dùng lại vào ngày khác nhé."); return; }
+  c.useDays.push(t); const n = c.useDays.length;
+  if(n >= MASTER_DAYS){ const was = c.mastered; c.mastered = true; c.due = addDays(t, KEEP);
+    toast(was ? `✓ Vẫn nhớ. Ôn lại sau ${KEEP} ngày` : `🎉 "${c.text}" đã thuộc (3 ngày khác nhau)`); }
+  else { c.due = addDays(t, NEXT[n]); toast(`${n}/${MASTER_DAYS} ngày · ôn lại sau ${NEXT[n]} ngày`); }
+  save();
+}
+function forgetChunk(c){
+  c.mastered = false; c.useDays = (c.useDays||[]).slice(-1); c.due = addDays(TODAY(), 1);
+  c.forgot = (c.forgot||0)+1; save(); toast("Ghi nhận. Chunk sẽ quay lại vào ngày mai.");
+}
+const isDue = c => c.date < TODAY() && (c.due || addDays(c.date,1)) <= TODAY();
+const dueChunks = () => S.chunks.filter(isDue).sort((a,b)=>(a.due||"").localeCompare(b.due||""));
+const usedToday = c => (c.useDays||[]).includes(TODAY());
+
+// ---------- Lỗi sai ----------
+const activeMistakes = () => (S.mistakes||[]).filter(m=>!m.fixed).sort((a,b)=>b.date.localeCompare(a.date));
+
+// ---------- Nội dung bài học ----------
+const TOPICS = ["working from home","a delayed flight","online shopping and returns","changing plans with friends","renting an apartment","visiting a doctor","ordering food delivery","a job interview","traffic in big cities","weekend plans","learning a new skill","dealing with a broken air conditioner","bank fees","a team deadline at work","booking a hotel","healthy eating","using social media","travelling in Vietnam","coffee culture","saving money"];
+
+const todayChunks = () => S.chunks.filter(c => c.date === TODAY());
+// Tuần này: chunks chưa thuộc học trong tuần + chunks cũ đang đến hạn
+const weekChunks = () => { const m = ymd(mondayOf(new Date())); return S.chunks.filter(c => !c.mastered && (c.date >= m || isDue(c))); };
+const list = arr => arr.length ? arr.map(c=>`"${c.text}"`).join(", ") : "";
+const CHUNK_FORMAT = `Format each chunk on one line exactly like this:
+chunk | function (in Vietnamese) | a new example sentence
+No numbering, no extra text.`;
+
+const P = {
+  readText: t => `Give me a B2-level reading text (about 350 words) about: ${t}.
+Don't ask questions yet. When I say "done", ask me 1 main-idea question, 2 detail questions and 1 inference question, one at a time. Check each answer briefly.`,
+  listenText: t => `Write a natural 2-minute dialogue (B2, about 250 words) about: ${t}.
+I will use "Read aloud" to listen without reading. When I say "done", ask me 1 main-idea question, 2 detail questions and 1 inference question, one at a time. Check each answer briefly.`,
+  chunks: () => `From this text, suggest 6–8 reusable chunks that are useful for everyday speaking.
+${CHUNK_FORMAT}`,
+  retell: () => `I will now retell the text in 30–60 seconds. Score my retell on:
+(1) main idea, (2) two supporting points, (3) whether I used at least 2 of these chunks correctly: ${list(todayChunks()) || "the chunks above"}, (4) at most 2 language corrections with a more natural version. Keep it short.`,
+  roleplay: t => `Roleplay with me. Create a realistic situation in Vietnam related to: ${t}.
+You are the other person; I am myself. Start with one line, then wait for my answer. Keep it going for 5 turns. Do NOT correct me during the roleplay.${todayChunks().length ? " Create chances for me to use: " + list(todayChunks()) + "." : ""}`,
+  feedback: () => `Stop the roleplay. Give me at most 3 points: 1 important mistake, 1 more natural way to say something I said, 1 useful pattern to reuse. Keep it short.`,
+  retry: () => `Let's do the same situation again with one change (choose one): the other person disagrees / I need to be more polite / my first choice is not available. Start again with one line.`,
+  convo: t => `Ask me one open question about: ${t}. After each answer, ask one follow-up question (5 in total). Do not correct me until the end. Then give me at most 3 corrections with more natural versions.`,
+  convoRetry: () => `Which of my answers was the weakest? Ask me that question again so I can retry it.`,
+  review: () => `Here are chunks I'm still learning: ${list(weekChunks()) || "(none yet)"}.
+For each one, give me a short situation on a different topic and I will say one sentence using the chunk. One at a time. Correct me briefly.`,
+  freeTalk: () => `Give me a surprise everyday situation in Vietnam. Don't tell me the topic, just start roleplaying with one line. Keep going for 6 turns with no corrections.${weekChunks().length ? " Create chances for me to use: " + list(weekChunks()) + "." : ""} Then list my 3 most repeated mistakes.`,
+  warmup: () => `Ask me how my day was, then 2 short follow-up questions. No corrections.`,
+  sunday: () => `Let's chat casually about my week and my plans for next week. Ask one question at a time. No corrections.`
+};
+
+// Đoạn copy kèm từ khóa: nối trưa với tối bằng chủ đề, chunks và lỗi gần nhất
+function kwText(kw, part, topic, real){
+  const L = [kw];
+  if(topic && !real) L.push(`Topic: ${topic}`);
+  if(part === "n"){
+    const due = dueChunks().slice(0,3);
+    if(due.length) L.push(`Old chunks I want to reuse in my retell: ${list(due)}`);
+    L.push("Chunk format, one per line: chunk | function (in Vietnamese) | example sentence");
+    // Listening audio thật: không cần ChatGPT tạo bài, dán transcript ở cuối
+    if(real) L.push("Don't write a new text. This is the transcript of a real audio clip I listened to. Ask me comprehension questions about it, then suggest chunks from it.", "Transcript:", "");
+  } else {
+    const tc = todayChunks(), due = dueChunks().filter(c=>!tc.includes(c)).slice(0,2);
+    if(tc.length || due.length) L.push(`Create chances for me to use: ${list([...tc, ...due])}`);
+    const ms = activeMistakes().slice(0,3);
+    if(ms.length) L.push(`Watch my recent mistakes: ${ms.map(m=>m.text).join("; ")}`);
+  }
+  return L.join("\n");
+}
+const AUDIO = [
+  ["BBC 6 Minute English","https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"],
+  ["VOA Learning English","https://learningenglish.voanews.com/"],
+  ["TED-Ed","https://www.youtube.com/@TEDEd"]
+];
+
+// step: [time, text, promptFn?, action?]
+// kw: từ khóa bạn đã cài sẵn trong ChatGPT
+const NOON_R = {tag:["READING","r"], kw:["Sói CI"], steps:[
+  ["0–3'","Recall: Ôn tập → Đến hạn. Nhớ chunk trước khi lật.",null,"recall"],
+  ["3–10'","Copy từ khóa (đã kèm chủ đề) vào ChatGPT. Đọc bài, không tra từ, trả lời 1 câu ý chính, 2 câu chi tiết, 1 câu suy luận.",null],
+  ["10–13'",`Chọn tối đa ${LIMIT_INPUT} chunks dùng được nhất, lưu vào app.`,null,"add"],
+  ["13–15'","Retell bằng giọng nói 30–60s, dùng ≥ 2 chunks.",null]
+]};
+// T3: cách bạn đang dùng — ChatGPT tạo bài, nghe bằng Google Translate
+const NOON_L = {tag:["LISTENING","l"], kw:["Sói listening"], gt:true, steps:[
+  ["0–3'","Recall: Ôn tập → Đến hạn.",null,"recall"],
+  ["3–10'","Copy từ khóa vào ChatGPT. Copy bài nghe sang Google Translate, bấm 🔊. Nghe 2 lượt, không nhìn chữ (lượt 1 ý chính, lượt 2 chi tiết). Quay lại ChatGPT trả lời câu hỏi.",null],
+  ["10–13'",`Chọn tối đa ${LIMIT_INPUT} chunks, nghe lại và nhại (echo) theo ngữ điệu, lưu vào app.`,null,"add"],
+  ["13–15'","Retell bằng giọng nói 30–60s.",null]
+]};
+// T5: 1 buổi/tuần nghe audio thật (người nói thật, tốc độ tự nhiên)
+const NOON_LR = {tag:["LISTENING · AUDIO THẬT","l"], kw:["Sói listening"], real:true, audio:true,
+  note:"1 buổi/tuần nghe người nói thật để quen tốc độ và nối âm tự nhiên.", steps:[
+  ["0–3'","Recall: Ôn tập → Đến hạn.",null,"recall"],
+  ["3–10'","Mở 1 clip 1–3' (link bên trên). Nghe 2 lượt, không nhìn chữ. Copy transcript của clip, bấm nút từ khóa rồi dán transcript vào cuối.",null],
+  ["10–13'",`Chọn tối đa ${LIMIT_INPUT} chunks, nghe lại đúng đoạn đó và nhại theo, lưu vào app.`,null,"add"],
+  ["13–15'","Retell bằng giọng nói 30–60s.",null]
+]};
+const NIGHT_S = {tag:["SITUATION","s"], kw:["Sói Situation"], steps:[
+  ["0–2'","Recall chunks buổi trưa (danh sách bên dưới), không nhìn ghi chú.",null,"recall-today"],
+  ["2–9'","Copy từ khóa (đã kèm chủ đề, chunks, lỗi gần đây). Roleplay 5 lượt bằng giọng nói, bắt đầu trả lời trong 3–5 giây.",null],
+  ["9–12'",`Nhận feedback ≤ 3 điểm. Ghi lỗi chính vào ô bên dưới. Lưu tối đa ${LIMIT_SPEAK} pattern thành chunk.`,null,"mistake"],
+  ["12–15'","Retry có biến thể. Chunk nào dùng đúng → bấm ✓ dùng bên dưới.",null]
+]};
+const NIGHT_C = {tag:["CONVERSATION","c"], kw:["Sói speak"], steps:[
+  ["0–2'","Recall chunks buổi trưa.",null,"recall-today"],
+  ["2–11'","Copy từ khóa. 1 câu hỏi mở + 3–5 follow-up, mỗi câu nói 45–60s.",null],
+  ["11–15'","Nhận ≤ 3 sửa lỗi, ghi lỗi chính vào ô bên dưới, retry câu yếu nhất.",null,"mistake"]
+]};
+const NOON_RL = {tag:["READING / LISTENING","r"], kw:["Sói CI","Sói listening"], gt:true, note:"Chọn kỹ năng bạn thấy yếu hơn tuần này.", steps:[
+  ["0–3'","Recall: Ôn tập → Đến hạn.",null,"recall"],
+  ["3–10'","Copy 1 trong 2 từ khóa: Sói CI (Reading) hoặc Sói listening (nghe bằng Google Translate).",null],
+  ["10–13'",`Chọn tối đa ${LIMIT_INPUT} chunks, lưu vào app.`,null,"add"],
+  ["13–15'","Retell 30–60s.",null]
+]};
+const NOON_REV = {tag:["REVIEW","o"], noTopic:true, steps:[
+  ["0–5'","Ôn tập → Tuần này. Lật từng chunk, nói được câu mới thì bấm ✓.",null,"recall-week"],
+  ["5–12'","Nói 1 câu mới cho mỗi chunk, ở chủ đề khác.",P.review],
+  ["12–15'","Xem lại danh sách lỗi tuần (tab Thêm). Lỗi nào đã hết mắc thì đánh dấu đã sửa.",null,"more"]
+]};
+const NIGHT_F = {tag:["FREE TALK","o"], noTopic:true, steps:[
+  ["0–2'","Warm-up: kể về ngày của bạn.",P.warmup],
+  ["2–9'","Tình huống bất ngờ, cố dùng lại chunks của tuần.",P.freeTalk],
+  ["9–12'","🎙 Ghi âm 60s (app Ghi âm iPhone), luôn cùng câu hỏi: \"Tell me about your week.\" Ghi số lần khựng và số chunks dùng vào tab Thêm.",null,"more"],
+  ["12–15'","Làm bảng tự kiểm tra tuần.",null,"more"]
+]};
+const SUN = {tag:["NGHỈ","x"], noTopic:true, note:"Nghỉ hoàn toàn, hoặc nói tự do 10–15' không cần sửa lỗi.", steps:[
+  ["10–15'","(Tùy chọn) Nói chuyện tự do về tuần qua / tuần tới.",P.sunday]
+]};
+const PLAN = {
+  1:{name:"Reading / Situation", noon:NOON_R, night:NIGHT_S},
+  2:{name:"Listening / Situation", noon:NOON_L, night:NIGHT_S},
+  3:{name:"Reading / Situation", noon:NOON_R, night:NIGHT_S},
+  4:{name:"Listening (audio thật) / Situation", noon:NOON_LR, night:NIGHT_S},
+  5:{name:"R/L / Conversation", noon:NOON_RL, night:NIGHT_C},
+  6:{name:"Review / Free talk", noon:NOON_REV, night:NIGHT_F},
+  0:{name:"Nghỉ", noon:SUN, night:null}
+};
+</script>
+<script>
+"use strict";
+// ---------- Điều hướng ----------
+let tab = "today", recallMode = "prev", chunkFilter = "all", chunkQuery = "";
+function go(t, opt){
+  tab = t; if(opt) recallMode = opt;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on", b.dataset.tab===t));
+  document.querySelectorAll("main section").forEach(s=>s.hidden = s.id !== "tab-"+t);
+  render(); window.scrollTo(0,0);
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>go(b.dataset.tab));
+function render(){
+  const d = new Date();
+  $("#hdSub").textContent = `${DAYN[d.getDay()]} · ${pad(d.getDate())}/${pad(d.getMonth()+1)} · ${PLAN[d.getDay()].name}`;
+  ({today:rToday, recall:rRecall, chunks:rChunks, more:rMore})[tab]();
+}
+
+// ---------- Hôm nay ----------
+function topicOf(log){
+  if(!log.topic){ log.topic = TOPICS[Math.floor(Math.random()*TOPICS.length)]; save(); }
+  return log.topic;
+}
+function rToday(){
+  const d = new Date(), wd = d.getDay(), plan = PLAN[wd], log = dayLog(TODAY());
+  const mon = mondayOf(d);
+  let h = `<div class="week">`;
+  for(let i=0;i<7;i++){ const x=new Date(mon); x.setDate(mon.getDate()+i); const k=x.getDay();
+    h += `<div class="${k===wd?"on":""}"><b>${DAYN[k]}</b>${pad(x.getDate())}</div>`; }
+  h += `</div>`;
+  const needTopic = !plan.noon.noTopic;
+  if(needTopic){
+    const t = topicOf(log);
+    h += `<div class="card"><h2>🎯 Chủ đề hôm nay</h2>
+      <input type="text" id="topic" value="${esc(t)}">
+      <div class="row"><button class="ghost sm" id="newTopic">🎲 Chủ đề khác</button></div>
+      <div class="muted" style="margin-top:6px">Trưa và tối dùng cùng chủ đề này. Có thể gõ chủ đề của bạn.</div></div>`;
+  }
+  h += block("☀ Trưa · 15'", plan.noon, "n", log);
+  if(plan.night) h += block("🌙 Tối · 15'", plan.night, "t", log);
+  const tc = todayChunks();
+  if(plan.night || tc.length){
+    h += `<div class="card"><h2>📌 Chunks hôm nay (${tc.length})</h2>`;
+    h += tc.length ? tc.map(c=>chunkCard(c,true)).join("") : `<div class="muted">Chưa có. Thêm ở bước 10–13' buổi trưa.</div>`;
+    h += `<div class="row"><button class="sm" data-act="add">+ Thêm chunk</button></div></div>`;
+  }
+  $("#tab-today").innerHTML = h;
+  const tp = $("#topic");
+  if(tp){ tp.onchange = ()=>{ log.topic = tp.value.trim(); save(); render(); };
+    $("#newTopic").onclick = ()=>{ log.topic = ""; topicOf(log); render(); }; }
+  bindCommon($("#tab-today"));
+  $("#tab-today").querySelectorAll(".step input").forEach(cb=>cb.onchange=()=>{ log.done[cb.dataset.k]=cb.checked; save(); cb.closest(".step").classList.toggle("done",cb.checked); });
+  $("#tab-today").querySelectorAll("[data-kw]").forEach(b=>b.onclick=()=>{
+    const [part,j] = b.dataset.kw.split(":"); const blk = part==="n"?plan.noon:plan.night;
+    copy(kwText(blk.kw[+j], part, log.topic, !!blk.real));
+  });
+  const mi = $("#mInput");
+  if(mi){ const add = ()=>{ const v = mi.value.trim(); if(!v) return;
+      (S.mistakes = S.mistakes||[]).push({id:uid(), text:v, date:TODAY(), fixed:false}); save(); toast("Đã lưu lỗi. Tối mai ChatGPT sẽ nhắc."); render(); };
+    $("#mAdd").onclick = add; mi.onkeydown = e=>{ if(e.key==="Enter") add(); }; }
+  $("#tab-today").querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{
+    const [part,i] = b.dataset.copy.split(":"); const blk = part==="n"?plan.noon:plan.night;
+    copy(blk.steps[+i][2](log.topic || "daily life"));
+  });
+}
+function block(title, b, part, log){
+  let h = `<div class="card"><h2>${title} <span class="tag ${b.tag[1]}">${b.tag[0]}</span></h2>`;
+  if(b.note) h += `<div class="muted">${b.note}</div>`;
+  if(b.kw) h += `<div class="kw">🔑 ${b.kw.map((k,j)=>`<button class="sm" data-kw="${part}:${j}">📋 ${esc(k)}</button>`).join(" ")}
+    <a class="btn ghost sm" href="https://chatgpt.com/" target="_blank" rel="noopener" style="padding:5px 10px;font-size:13px;margin-left:auto">Mở ChatGPT</a></div>
+    <div class="muted" style="margin-bottom:4px">Bấm để copy từ khóa kèm chủ đề${part==="t"?", chunks và lỗi gần đây":" và chunks cũ cần ôn"}.</div>`;
+  if(b.audio) h += `<div class="kw" style="background:#ecfdf5">🎧 Audio thật: ${AUDIO.map(([n,u])=>`<a class="btn ghost sm" href="${u}" target="_blank" rel="noopener" style="padding:4px 9px;font-size:12px">${n}</a>`).join(" ")}</div>`;
+  if(b.gt) h += `<div class="kw" style="background:#ecfdf5">🔊 <a class="btn ghost sm" href="https://translate.google.com/?sl=en&tl=vi&op=translate" target="_blank" rel="noopener" style="padding:4px 9px;font-size:12px">Mở Google Translate</a><span class="muted">Dán bài nghe, bấm 🔊</span></div>`;
+  b.steps.forEach((s,i)=>{
+    const k = part+i, done = !!log.done[k];
+    h += `<div class="step ${done?"done":""}"><input type="checkbox" data-k="${k}" ${done?"checked":""}>
+      <div class="t">${s[0]}</div><div style="flex:1"><div class="txt">${s[1]}</div><div class="row" style="margin-top:6px">`;
+    if(s[2]) h += `<button class="sm" data-copy="${part}:${i}">📋 Copy prompt</button><a class="btn ghost sm" href="https://chatgpt.com/" target="_blank" rel="noopener" style="padding:5px 10px;font-size:13px">Mở ChatGPT</a>`;
+    if(s[3]==="recall"){ const n = dueChunks().length; h += `<button class="ghost sm" data-act="recall">🧠 Ôn đến hạn (${n})</button>`; }
+    if(s[3]==="mistake"){
+      const tm = (S.mistakes||[]).filter(m=>m.date===TODAY());
+      h += `</div><div style="margin-top:6px"><div style="display:flex;gap:6px"><input type="text" id="mInput" placeholder="VD: 'discuss about' → 'discuss'" style="margin:0"><button class="sm" id="mAdd">Lưu lỗi</button></div>
+        ${tm.map(m=>`<div class="muted" style="margin-top:4px">❌ ${esc(m.text)}</div>`).join("")}</div>
+        <div class="row" style="margin-top:6px"><button class="ghost sm" data-act="add">+ Lưu pattern</button>`;
+    }
+    if(s[3]==="recall-today") h += `<button class="ghost sm" data-act="recall-today">🧠 Ôn chunks trưa</button>`;
+    if(s[3]==="recall-week") h += `<button class="ghost sm" data-act="recall-week">🧠 Ôn tuần này</button>`;
+    if(s[3]==="add") h += `<button class="ghost sm" data-act="add">+ Thêm chunk</button>`;
+    if(s[3]==="more") h += `<button class="ghost sm" data-act="more">📝 Ghi chú tuần</button>`;
+    h += `</div></div></div>`;
+  });
+  return h + `</div>`;
+}
+function bindCommon(root){
+  root.querySelectorAll("[data-act]").forEach(b=>b.onclick=()=>{
+    const a = b.dataset.act;
+    if(a==="recall") go("recall","due");
+    else if(a==="recall-today") go("recall","today");
+    else if(a==="recall-week") go("recall","week");
+    else if(a==="add") openForm();
+    else if(a==="more") go("more");
+  });
+  root.querySelectorAll("[data-use]").forEach(b=>b.onclick=()=>{ const c = S.chunks.find(x=>x.id===b.dataset.use); if(c) useChunk(c); render(); });
+  root.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openForm(b.dataset.edit));
+}
+const SRC = {R:"Reading",L:"Listening",S:"Speaking"};
+const dm = s => s ? `${s.slice(8)}/${s.slice(5,7)}` : "";
+function badge(c){
+  const n = (c.useDays||[]).length;
+  return `<span class="badge ${c.mastered?"m":""}">${c.mastered?"✓ thuộc":`${n}/${MASTER_DAYS} ngày`}</span>`;
+}
+function chunkCard(c, withUse){
+  const u = usedToday(c);
+  return `<div class="chunk ${c.src}"><div class="ct">${esc(c.text)}</div>
+    ${c.fn?`<div class="cf">${esc(c.fn)}</div>`:""}${c.ex?`<div class="ce">${esc(c.ex)}</div>`:""}
+    <div class="meta"><span>${SRC[c.src]||""} · ${dm(c.date)} · ${badge(c)}${c.due && !c.mastered?` · ôn ${dm(c.due)}`:""}</span>
+    <span>${withUse?`<button class="${u?"ghost":"ok"} sm" data-use="${c.id}" ${u?"disabled":""}>${u?"✓ hôm nay":"✓ dùng"}</button> `:""}<button class="ghost sm" data-edit="${c.id}">Sửa</button></span></div></div>`;
+}
+</script>
+<div id="sheet" hidden style="position:fixed;inset:0;background:#0006;z-index:10;display:none;align-items:flex-end">
+<div style="background:#fff;width:100%;max-height:92vh;overflow:auto;border-radius:16px 16px 0 0;padding:14px 14px calc(16px + env(safe-area-inset-bottom))" id="sheetBody"></div></div>
+<script>
+"use strict";
+// ---------- Form thêm / sửa chunk ----------
+const sheet = $("#sheet"), sb = $("#sheetBody");
+sheet.onclick = e => { if(e.target===sheet) closeSheet(); };
+function closeSheet(){ sheet.hidden = true; sheet.style.display="none"; }
+function openSheet(html){ sb.innerHTML = html; sheet.hidden = false; sheet.style.display="flex"; }
+function defaultSrc(){ const h = new Date().getHours(), wd = new Date().getDay();
+  if(h >= 17) return "S"; return (wd===2||wd===4) ? "L" : "R"; }
+function srcSelect(v){ return `<select id="fSrc">${Object.entries(SRC).map(([k,n])=>`<option value="${k}" ${k===v?"selected":""}>${n}</option>`).join("")}</select>`; }
+
+// Số chunk còn được thêm hôm nay theo nguồn: input (R/L) tối đa 3, speaking (S) tối đa 1
+function quota(src){
+  const tc = todayChunks(), isS = src==="S";
+  const used = tc.filter(x => isS ? x.src==="S" : x.src!=="S").length;
+  return (isS ? LIMIT_SPEAK : LIMIT_INPUT) - used;
+}
+function quotaMsg(src){ const q = quota(src), lim = src==="S"?LIMIT_SPEAK:LIMIT_INPUT, name = src==="S"?"pattern từ Speaking":"chunks từ Reading/Listening";
+  return q > 0 ? `Hôm nay còn được thêm <b>${q}</b> ${name}.` : `<b style="color:#b91c1c">Đã đủ ${lim} ${name} hôm nay.</b> Ít mà dùng được tốt hơn nhiều mà quên.`; }
+
+function openForm(id){
+  const c = id ? S.chunks.find(x=>x.id===id) : null;
+  let h = `<h2 style="font-size:17px;margin-bottom:6px">${c?"Sửa chunk":"Thêm chunk"}</h2>`;
+  if(!c) h += `<div class="tip" id="quota">${quotaMsg(defaultSrc())}</div>`;
+  if(!c){
+    h += `<div class="seg"><button class="on" data-m="one">Từng chunk</button><button data-m="bulk">Dán từ ChatGPT</button></div>`;
+  }
+  h += `<div id="mOne">
+    <label class="f">Chunk *</label><input type="text" id="fText" value="${esc(c?.text)}" placeholder="I ended up + V-ing" autocapitalize="off">
+    <label class="f">Chức năng / nghĩa</label><input type="text" id="fFn" value="${esc(c?.fn)}" placeholder="nói về kết quả cuối cùng, khác dự định">
+    <label class="f">Câu ví dụ của bạn</label><textarea id="fEx" placeholder="We couldn't find a restaurant, so we ended up eating at home.">${esc(c?.ex)}</textarea>
+    <label class="f">Nguồn</label>${srcSelect(c?.src || defaultSrc())}
+  </div>`;
+  if(!c){
+    h += `<div id="mBulk" hidden>
+      <div class="muted" style="margin-top:4px">Dán các dòng ChatGPT trả về theo dạng<br><b>chunk | chức năng | câu ví dụ</b>. Sau đó bỏ chọn những cụm không cần (giữ 3–4).</div>
+      <textarea id="fBulk" style="min-height:120px" placeholder="I ended up + V-ing | kết quả cuối cùng | We ended up eating at home."></textarea>
+      <button class="ghost sm" id="pasteBtn" style="margin-top:6px">📋 Dán từ clipboard</button>
+      <div id="bulkList" style="margin-top:8px"></div>
+      <label class="f">Nguồn</label>${srcSelect(defaultSrc()).replace('id="fSrc"','id="fSrcB"')}
+    </div>`;
+  }
+  h += `<div class="row" style="margin-top:12px"><button id="fSave" style="flex:1">Lưu</button><button class="ghost" id="fCancel">Hủy</button>
+    ${c?`<button class="danger" id="fDel">Xóa</button>`:""}</div>`;
+  openSheet(h);
+  let mode = "one";
+  sb.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{ mode=b.dataset.m;
+    sb.querySelectorAll("[data-m]").forEach(x=>x.classList.toggle("on",x===b));
+    $("#mOne").hidden = mode!=="one"; $("#mBulk").hidden = mode!=="bulk"; });
+  const bulk = $("#fBulk");
+  if(bulk){
+    bulk.oninput = ()=>{ const rows = parseBulk(bulk.value);
+      const q = Math.max(0, quota($("#fSrcB").value));
+      $("#bulkList").innerHTML = rows.map((r,i)=>`<label class="step" style="border:0;padding:4px 0"><input type="checkbox" data-b="${i}" ${i<q?"checked":""}><div><b>${esc(r.text)}</b>${r.fn?` <span class="muted">· ${esc(r.fn)}</span>`:""}</div></label>`).join(""); };
+    $("#pasteBtn").onclick = async ()=>{ try{ bulk.value = await navigator.clipboard.readText(); bulk.oninput(); }catch(e){ toast("Không đọc được clipboard. Hãy bấm giữ ô trên → Dán."); } };
+  }
+  ["#fSrc","#fSrcB"].forEach(s=>{ const el = $(s); if(el && !c) el.onchange = ()=>{ $("#quota").innerHTML = quotaMsg(el.value); }; });
+  const overLimit = (src, n) => { const q = quota(src);
+    return n > q && !confirm(q > 0 ? `Hôm nay chỉ còn ${q} chỗ cho nguồn này, bạn đang thêm ${n}. Vẫn lưu?` : `Hôm nay đã đủ giới hạn cho nguồn này. Vẫn lưu?`); };
+  $("#fCancel").onclick = closeSheet;
+  if(c) $("#fDel").onclick = ()=>{ if(confirm(`Xóa "${c.text}"?`)){ S.chunks = S.chunks.filter(x=>x!==c); save(); closeSheet(); render(); } };
+  $("#fSave").onclick = ()=>{
+    if(mode==="bulk"){
+      const rows = parseBulk(bulk.value), src = $("#fSrcB").value;
+      const pick = [...sb.querySelectorAll("[data-b]")].filter(x=>x.checked).map(x=>rows[+x.dataset.b]);
+      if(!pick.length){ toast("Chưa chọn chunk nào"); return; }
+      if(overLimit(src, pick.length)) return;
+      pick.forEach(r=>S.chunks.push(newChunk(r.text,r.fn,r.ex,src)));
+      save(); closeSheet(); render(); toast(`Đã lưu ${pick.length} chunks`); return;
+    }
+    const text = $("#fText").value.trim(); if(!text){ toast("Nhập chunk trước"); return; }
+    if(c){ Object.assign(c,{text, fn:$("#fFn").value.trim(), ex:$("#fEx").value.trim(), src:$("#fSrc").value}); }
+    else { if(overLimit($("#fSrc").value, 1)) return;
+      S.chunks.push(newChunk(text,$("#fFn").value.trim(),$("#fEx").value.trim(),$("#fSrc").value)); }
+    save(); closeSheet(); render(); toast("Đã lưu");
+  };
+}
+function newChunk(text,fn,ex,src){ return {id:uid(), text, fn:fn||"", ex:ex||"", src, date:TODAY(), useDays:[], due:addDays(TODAY(),1), mastered:false}; }
+function parseBulk(t){
+  return t.split(/\r?\n/).map(l=>l.replace(/^\s*(?:[-*•]|\d+[.)])\s*/,"").replace(/\*\*/g,"").trim()).filter(l=>l.includes("|"))
+    .map(l=>{ const p=l.split("|").map(x=>x.trim().replace(/^["“]|["”]$/g,"")); return {text:p[0], fn:p[1]||"", ex:p.slice(2).join(" | ")}; })
+    .filter(r=>r.text);
+}
+
+// ---------- Ôn tập ----------
+function prevStudyDate(){
+  const ds = [...new Set(S.chunks.map(c=>c.date))].filter(d=>d<TODAY()).sort();
+  return ds[ds.length-1];
+}
+function recallSet(){
+  if(recallMode==="today") return {title:"Chunks hôm nay", items:todayChunks()};
+  if(recallMode==="week") return {title:"Tuần này (chưa thuộc + đến hạn)", items:weekChunks()};
+  if(recallMode==="all") return {title:"Tất cả chưa thuộc", items:S.chunks.filter(c=>!c.mastered)};
+  return {title:"Đến hạn ôn hôm nay", items:dueChunks()};
+}
+let revealed = new Set();
+function rRecall(){
+  if(recallMode==="prev") recallMode = "due";
+  const set = recallSet();
+  let h = `<div class="seg">${[["due","Đến hạn"],["today","Hôm nay"],["week","Tuần này"],["all","Tất cả"]].map(([k,n])=>`<button data-r="${k}" class="${recallMode===k?"on":""}">${n}</button>`).join("")}</div>
+    <div class="tip">Nhìn <b>chức năng</b>, tự nói ra chunk và đặt 1 câu mới <b>trước</b> khi lật. Nói được → <b>✓ Dùng được</b>. Mỗi ngày tính tối đa 1 lần. Dùng được vào <b>3 ngày khác nhau</b> thì chunk được tính là đã thuộc. Chunk tự quay lại sau 1 → 3 → 7 ngày.</div>
+    <h3 style="margin:0 0 8px">${set.title} · ${set.items.length}</h3>`;
+  if(!set.items.length) h += `<div class="empty">${recallMode==="due" ? "Không có chunk nào đến hạn hôm nay. 👍" : "Chưa có chunk nào ở đây.<br>Thêm chunk ở bước 10–13' buổi trưa."}</div>`;
+  set.items.forEach(c=>{
+    const open = revealed.has(c.id), u = usedToday(c);
+    h += `<div class="chunk ${c.src}">
+      <div class="cf"><b>Gợi ý:</b> ${esc(c.fn || "(không có chức năng — thử nhớ chunk từ chữ cái đầu: "+c.text.slice(0,2)+"…)")}</div>
+      ${open ? `<div class="ct" style="margin-top:4px">${esc(c.text)}</div>${c.ex?`<div class="ce">${esc(c.ex)}</div>`:""}`
+             : `<div class="hide" data-show="${c.id}">👆 Chạm để lật</div>`}
+      <div class="meta">${badge(c)}
+      <span>${u ? `<span class="muted">✓ đã tính hôm nay</span>` : `<button class="ok sm" data-ok="${c.id}">✓ Dùng được</button> <button class="no sm" data-no="${c.id}">✗ Quên</button>`}</span></div></div>`;
+  });
+  $("#tab-recall").innerHTML = h;
+  $("#tab-recall").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ recallMode=b.dataset.r; revealed.clear(); render(); });
+  $("#tab-recall").querySelectorAll("[data-show]").forEach(b=>b.onclick=()=>{ revealed.add(b.dataset.show); render(); });
+  $("#tab-recall").querySelectorAll("[data-ok]").forEach(b=>b.onclick=()=>{ const c=S.chunks.find(x=>x.id===b.dataset.ok); if(c) useChunk(c); revealed.add(b.dataset.ok); render(); });
+  $("#tab-recall").querySelectorAll("[data-no]").forEach(b=>b.onclick=()=>{ const c=S.chunks.find(x=>x.id===b.dataset.no); if(c) forgetChunk(c); revealed.add(b.dataset.no); render(); });
+}
+</script>
+<script>
+"use strict";
+// ---------- Chunks ----------
+function rChunks(){
+  const q = chunkQuery.toLowerCase();
+  let items = S.chunks.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if(chunkFilter==="learning") items = items.filter(c=>!c.mastered);
+  if(chunkFilter==="mastered") items = items.filter(c=>c.mastered);
+  if(q) items = items.filter(c=>(c.text+" "+c.fn+" "+c.ex).toLowerCase().includes(q));
+  let h = `<input type="search" id="q" placeholder="🔍 Tìm chunk..." value="${esc(chunkQuery)}" style="margin:0 0 8px">
+    <div class="seg">${[["all","Tất cả"],["learning","Đang học"],["mastered","Đã thuộc"]].map(([k,n])=>`<button data-f="${k}" class="${chunkFilter===k?"on":""}">${n}</button>`).join("")}</div>
+    <div class="row" style="margin:0 0 10px"><button class="sm" data-act="add">+ Thêm chunk</button><span class="muted" style="align-self:center">${items.length} chunks</span></div>`;
+  if(!items.length) h += `<div class="empty">Chưa có chunk nào.</div>`;
+  let cur = "";
+  items.forEach(c=>{ if(c.date!==cur){ cur=c.date; const d=new Date(c.date+"T00:00"); h += `<h3 class="muted" style="margin:10px 0 4px">${DAYN[d.getDay()]} ${c.date.slice(8)}/${c.date.slice(5,7)}</h3>`; } h += chunkCard(c,true); });
+  $("#tab-chunks").innerHTML = h;
+  // Lọc tại chỗ, không vẽ lại ô tìm kiếm (để bàn phím iPhone không bị đóng)
+  const qi = $("#q"); qi.onchange = ()=>{ chunkQuery = qi.value; };
+  qi.oninput = ()=>{ const v = qi.value.toLowerCase(); chunkQuery = qi.value;
+    $("#tab-chunks").querySelectorAll(".chunk").forEach(el=>{ el.style.display = el.textContent.toLowerCase().includes(v) ? "" : "none"; }); };
+  $("#tab-chunks").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{ chunkFilter=b.dataset.f; render(); });
+  bindCommon($("#tab-chunks"));
+}
+
+// ---------- Thêm: tiến độ, ghi chú, sao lưu ----------
+const CHECKS = ["Dùng được 8–10 chunks không nhìn ghi chú","Nói liên tục 60–90s","Xử lý được câu follow-up bất ngờ","Diễn đạt lại được khi thiếu từ"];
+function weekKey(){ return "w"+ymd(mondayOf(new Date())); }
+function rMore(){
+  const wk = weekKey(), W = S.log[wk] || (S.log[wk] = {notes:"", checks:{}});
+  const mon = ymd(mondayOf(new Date()));
+  const wc = S.chunks.filter(c=>c.date>=mon);
+  let days = 0; for(const [k,v] of Object.entries(S.log)){ if(k>=mon && k[0]!=="w" && v.done && Object.values(v.done).some(Boolean)) days++; }
+  const lastBk = S.lastBackup ? Math.floor((Date.now()-S.lastBackup)/864e5) : null;
+  const rec = W.rec || {};
+  const recs = Object.entries(S.log).filter(([k,v])=>k[0]==="w" && v.rec && (v.rec.pauses!==undefined || v.rec.chunks!==undefined)).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
+  const ms = activeMistakes(), fixedN = (S.mistakes||[]).filter(m=>m.fixed).length;
+  let h = `<div class="card"><h2>📈 Tuần này</h2><div class="stats">
+      <div><b>${days}</b>ngày học</div><div><b>${wc.length}</b>chunks mới</div><div><b>${dueChunks().length}</b>đến hạn ôn</div></div>
+      <div class="muted" style="margin-top:8px">Đã thuộc (3 ngày khác nhau): <b>${S.chunks.filter(c=>c.mastered).length}</b> / ${S.chunks.length} chunks</div></div>
+    <div class="card"><h2>🎙 Ghi âm 60s (tối T7)</h2>
+      <div class="muted">Luôn cùng câu hỏi: <b>"Tell me about your week."</b> Ghi bằng app Ghi âm của iPhone, đặt tên theo ngày. Nghe lại rồi đếm.</div>
+      <div style="display:flex;gap:8px;margin-top:6px">
+        <label class="f" style="flex:1;margin:0">Số lần khựng > 2s<input type="text" inputmode="numeric" id="recP" value="${rec.pauses??""}"></label>
+        <label class="f" style="flex:1;margin:0">Số chunks đã dùng<input type="text" inputmode="numeric" id="recC" value="${rec.chunks??""}"></label></div>
+      ${recs.length ? `<h3>Xu hướng</h3>${recs.map(([k,v])=>`<div class="muted">Tuần ${dm(k.slice(1))}: khựng <b>${v.rec.pauses??"–"}</b> · chunks <b>${v.rec.chunks??"–"}</b></div>`).join("")}
+        <div class="muted" style="margin-top:4px">Sau 4 tuần: nghe lại bản tuần 1 và tuần 4 để so sánh.</div>` : ""}</div>
+    <div class="card"><h2>❌ Lỗi đang theo dõi (${ms.length})</h2>
+      <div class="muted">3 lỗi mới nhất được gửi kèm từ khóa buổi tối. Hết mắc thì bấm ✓ đã sửa.</div>
+      ${ms.length ? ms.map(m=>`<div class="step" style="align-items:center"><div class="txt" style="flex:1">${esc(m.text)} <span class="muted">· ${dm(m.date)}</span></div>
+        <button class="ok sm" data-fix="${m.id}">✓ đã sửa</button><button class="no sm" data-mdel="${m.id}">✕</button></div>`).join("") : `<div class="muted" style="margin-top:6px">Chưa có. Ghi ở bước feedback buổi tối.</div>`}
+      ${fixedN ? `<div class="muted" style="margin-top:6px">Đã sửa được: ${fixedN} lỗi</div>` : ""}</div>
+    <div class="card"><h2>✔ Tự kiểm tra (tối T7)</h2>
+      ${CHECKS.map((t,i)=>`<label class="step"><input type="checkbox" data-c="${i}" ${W.checks[i]?"checked":""}><div class="txt">${t}</div></label>`).join("")}
+      <h3>📝 Ghi chú tuần</h3>
+      <textarea id="notes" placeholder="Điều gì hiệu quả, điều gì cần đổi tuần sau...">${esc(W.notes)}</textarea>
+      ${prevWeekNotes()}</div>
+    <div class="card"><h2>💾 Sao lưu dữ liệu</h2>
+      <div class="muted">Dữ liệu chỉ nằm trên iPhone này. Nên sao lưu 1 lần/tuần (lưu vào Tệp/iCloud Drive).
+      ${lastBk===null?"<b>Chưa sao lưu lần nào.</b>":`Lần cuối: ${lastBk} ngày trước.`}</div>
+      <div class="row"><button id="exp">⬇️ Xuất file</button><button class="ghost" id="imp">⬆️ Nhập file</button></div></div>
+    <div class="card"><h2>ℹ️ Cách dùng nhanh</h2><ul class="list">
+      <li>Bấm nút <b>📋 Sói…</b> để copy từ khóa kèm chủ đề, chunks và lỗi gần đây, rồi dán vào ChatGPT.</li>
+      <li>Listening T3, T6: ChatGPT tạo bài, nghe bằng Google Translate. T5: nghe clip thật (BBC/VOA/TED-Ed), dán transcript sau từ khóa.</li>
+      <li>Review, Free talk, Chủ Nhật: dùng nút <b>Copy prompt</b>.</li>
+      <li>Nói bằng nút 🎤 hoặc chế độ Voice của ChatGPT, không gõ.</li>
+      <li>Mỗi ngày tối đa <b>${LIMIT_INPUT} chunks</b> từ Reading/Listening và <b>${LIMIT_SPEAK} pattern</b> từ Speaking.</li>
+      <li>Chunk dùng đúng → <b>✓ dùng</b> (tính 1 lần/ngày). Dùng được vào 3 ngày khác nhau thì chunk được tính là đã thuộc.</li></ul></div>`;
+  $("#tab-more").innerHTML = h;
+  $("#tab-more").querySelectorAll("[data-c]").forEach(cb=>cb.onchange=()=>{ W.checks[cb.dataset.c]=cb.checked; save(); });
+  $("#notes").onchange = e=>{ W.notes = e.target.value; save(); toast("Đã lưu ghi chú"); };
+  [["#recP","pauses"],["#recC","chunks"]].forEach(([s,k])=>{ $(s).onchange = e=>{ const v = e.target.value.trim();
+    W.rec = W.rec || {}; if(v==="") delete W.rec[k]; else W.rec[k] = parseInt(v,10)||0; save(); toast("Đã lưu"); render(); }; });
+  $("#tab-more").querySelectorAll("[data-fix]").forEach(b=>b.onclick=()=>{ const m=S.mistakes.find(x=>x.id===b.dataset.fix); if(m){ m.fixed=true; save(); toast("👍 Đã sửa được lỗi này"); render(); } });
+  $("#tab-more").querySelectorAll("[data-mdel]").forEach(b=>b.onclick=()=>{ if(confirm("Xóa lỗi này?")){ S.mistakes=S.mistakes.filter(x=>x.id!==b.dataset.mdel); save(); render(); } });
+  $("#exp").onclick = exportData;
+  $("#imp").onclick = ()=>$("#importFile").click();
+}
+function prevWeekNotes(){
+  const m = mondayOf(new Date()); m.setDate(m.getDate()-7);
+  const w = S.log["w"+ymd(m)];
+  return w && w.notes ? `<div class="muted" style="margin-top:8px"><b>Tuần trước:</b><br>${esc(w.notes).replace(/\n/g,"<br>")}</div>` : "";
+}
+async function exportData(){
+  S.lastBackup = Date.now(); save();
+  const name = `english30-${TODAY()}.json`, text = JSON.stringify(S,null,1);
+  const file = new File([text], name, {type:"application/json"});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{ await navigator.share({files:[file], title:name}); toast("Đã xuất"); render(); return; }catch(e){ if(e.name==="AbortError") return; }
+  }
+  const a = document.createElement("a"); a.href = URL.createObjectURL(file); a.download = name; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 2000); render();
+}
+$("#importFile").onchange = async e=>{
+  const f = e.target.files[0]; if(!f) return;
+  try{
+    const d = JSON.parse(await f.text());
+    if(!d || !Array.isArray(d.chunks)) throw 0;
+    if(!confirm(`File có ${d.chunks.length} chunks. Thay thế toàn bộ dữ liệu hiện tại (${S.chunks.length} chunks)?`)) return;
+    S = migrate(d); save(); toast("Đã nhập dữ liệu"); render();
+  }catch(err){ toast("File không hợp lệ"); }
+  e.target.value = "";
+};
+
+// ---------- Khởi động ----------
+let lastDay = TODAY();
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && TODAY()!==lastDay){ lastDay = TODAY(); render(); } });
+render();
+</script>
+</body></html>
