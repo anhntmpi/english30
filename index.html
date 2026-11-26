@@ -174,20 +174,36 @@ You are the other person; I am myself. Start with one line, then wait for my ans
   review: () => `Here are chunks I'm still learning: ${list(weekChunks()) || "(none yet)"}.
 For each one, give me a short situation on a different topic and I will say one sentence using the chunk. One at a time. Correct me briefly.`,
   freeTalk: () => `Give me a surprise everyday situation in Vietnam. Don't tell me the topic, just start roleplaying with one line. Keep going for 6 turns with no corrections.${weekChunks().length ? " Create chances for me to use: " + list(weekChunks()) + "." : ""} Then list my 3 most repeated mistakes.`,
+  realListen: () => `You are my English listening coach (target: B2 listening, B1 speaking).
+I just listened to a real audio clip (BBC/VOA) twice without reading. In my NEXT message I will paste its transcript.
+Don't write a new text and don't repeat the transcript back to me. Wait for the transcript, then work in 4 steps:
+
+STEP 1 – Comprehension. Ask me these questions in English, ONE AT A TIME, and wait for my answer before the next:
+- 1 main-idea question (What is it mainly about?)
+- 2 detail questions (numbers, reasons, examples that are clearly said)
+- 1 inference question (the speaker's opinion, attitude or purpose, not said directly)
+After each answer: say Correct / Partly / Wrong in one line, and give the short evidence from the transcript.
+
+STEP 2 – Chunks. Pick 6 natural, reusable chunks from the transcript that are useful in everyday speaking (not rare words). One per line, exactly this format, no numbering:
+chunk | function (in Vietnamese) | a new example sentence about daily life in Vietnam
+
+STEP 3 – Retell. Ask me to retell the clip in 30–60 seconds using at least 2 chunks.${dueChunks().length ? " Also encourage me to reuse these old chunks: " + list(dueChunks().slice(0,3)) + "." : ""}
+
+STEP 4 – Feedback. Score my retell: main idea ✓/✗, two supporting points ✓/✗, chunks used correctly ✓/✗. Then give at most 2 language corrections, each with a more natural version. Keep it short.
+
+Reply only "OK, paste the transcript." now.`,
   warmup: () => `Ask me how my day was, then 2 short follow-up questions. No corrections.`,
   sunday: () => `Let's chat casually about my week and my plans for next week. Ask one question at a time. No corrections.`
 };
 
 // Đoạn copy kèm từ khóa: nối trưa với tối bằng chủ đề, chunks và lỗi gần nhất
-function kwText(kw, part, topic, real){
+function kwText(kw, part, topic){
   const L = [kw];
-  if(topic && !real) L.push(`Topic: ${topic}`);
+  if(topic) L.push(`Topic: ${topic}`);
   if(part === "n"){
     const due = dueChunks().slice(0,3);
     if(due.length) L.push(`Old chunks I want to reuse in my retell: ${list(due)}`);
     L.push("Chunk format, one per line: chunk | function (in Vietnamese) | example sentence");
-    // Listening audio thật: không cần ChatGPT tạo bài, dán transcript ở cuối
-    if(real) L.push("Don't write a new text. This is the transcript of a real audio clip I listened to. Ask me comprehension questions about it, then suggest chunks from it.", "Transcript:", "");
   } else {
     const tc = todayChunks(), due = dueChunks().filter(c=>!tc.includes(c)).slice(0,2);
     if(tc.length || due.length) L.push(`Create chances for me to use: ${list([...tc, ...due])}`);
@@ -197,9 +213,10 @@ function kwText(kw, part, topic, real){
   return L.join("\n");
 }
 const AUDIO = [
-  ["BBC 6 Minute English","https://www.bbc.co.uk/learningenglish/english/features/6-minute-english"],
-  ["VOA Learning English","https://learningenglish.voanews.com/"],
-  ["TED-Ed","https://www.youtube.com/@TEDEd"]
+  // Bài ~3–5', B1–B2, có transcript ngay dưới audio
+  ["BBC Lingohack","https://www.bbc.co.uk/learningenglish/english/features/lingohack"],
+  ["BBC The English We Speak","https://www.bbc.co.uk/learningenglish/english/features/the-english-we-speak"],
+  ["VOA As It Is","https://learningenglish.voanews.com/z/3521"]
 ];
 
 // step: [time, text, promptFn?, action?]
@@ -218,10 +235,11 @@ const NOON_L = {tag:["LISTENING","l"], kw:["Sói listening"], gt:true, steps:[
   ["13–15'","Retell bằng giọng nói 30–60s.",null]
 ]};
 // T5: 1 buổi/tuần nghe audio thật (người nói thật, tốc độ tự nhiên)
-const NOON_LR = {tag:["LISTENING · AUDIO THẬT","l"], kw:["Sói listening"], real:true, audio:true,
-  note:"1 buổi/tuần nghe người nói thật để quen tốc độ và nối âm tự nhiên.", steps:[
+// T5: 1 buổi/tuần nghe audio thật ở BBC/VOA. Không dùng "Sói listening".
+const NOON_LR = {tag:["LISTENING · AUDIO THẬT","l"], audio:true, transcript:true,
+  note:"Không dùng Sói listening. Nghe ở BBC/VOA, ChatGPT chỉ đặt câu hỏi từ transcript.", steps:[
   ["0–3'","Recall: Ôn tập → Đến hạn.",null,"recall"],
-  ["3–10'","Mở 1 clip 1–3' (link bên trên). Nghe 2 lượt, không nhìn chữ. Copy transcript của clip, bấm nút từ khóa rồi dán transcript vào cuối.",null],
+  ["3–10'","Mở 1 link bên trên, chọn bài mới nhất. Nghe 2 lượt, không nhìn chữ (lượt 1 ý chính, lượt 2 chi tiết). Bài VOA dài thì chỉ nghe 2–3' đầu. Rồi gửi ChatGPT theo 2 tin nhắn như hướng dẫn bên trên.",null],
   ["10–13'",`Chọn tối đa ${LIMIT_INPUT} chunks, nghe lại đúng đoạn đó và nhại theo, lưu vào app.`,null,"add"],
   ["13–15'","Retell bằng giọng nói 30–60s.",null]
 ]};
@@ -319,8 +337,10 @@ function rToday(){
   $("#tab-today").querySelectorAll(".step input").forEach(cb=>cb.onchange=()=>{ log.done[cb.dataset.k]=cb.checked; save(); cb.closest(".step").classList.toggle("done",cb.checked); });
   $("#tab-today").querySelectorAll("[data-kw]").forEach(b=>b.onclick=()=>{
     const [part,j] = b.dataset.kw.split(":"); const blk = part==="n"?plan.noon:plan.night;
-    copy(kwText(blk.kw[+j], part, log.topic, !!blk.real));
+    copy(kwText(blk.kw[+j], part, log.topic));
   });
+  const rl = $("#rlCopy");
+  if(rl) rl.onclick = ()=>copy(P.realListen());
   const mi = $("#mInput");
   if(mi){ const add = ()=>{ const v = mi.value.trim(); if(!v) return;
       (S.mistakes = S.mistakes||[]).push({id:uid(), text:v, date:TODAY(), fixed:false}); save(); toast("Đã lưu lỗi. Tối mai ChatGPT sẽ nhắc."); render(); };
@@ -337,6 +357,14 @@ function block(title, b, part, log){
     <a class="btn ghost sm" href="https://chatgpt.com/" target="_blank" rel="noopener" style="padding:5px 10px;font-size:13px;margin-left:auto">Mở ChatGPT</a></div>
     <div class="muted" style="margin-bottom:4px">Bấm để copy từ khóa kèm chủ đề${part==="t"?", chunks và lỗi gần đây":" và chunks cũ cần ôn"}.</div>`;
   if(b.audio) h += `<div class="kw" style="background:#ecfdf5">🎧 Audio thật: ${AUDIO.map(([n,u])=>`<a class="btn ghost sm" href="${u}" target="_blank" rel="noopener" style="padding:4px 9px;font-size:12px">${n}</a>`).join(" ")}</div>`;
+  if(b.transcript) h += `<div class="card" style="background:#f8fafc;box-shadow:none;border:1px solid #e2e8f0;margin:6px 0">
+    <h3 style="margin-top:0">Cách gửi cho ChatGPT (2 tin nhắn)</h3>
+    <div class="muted" style="color:#334155">① Bấm <b>Copy prompt</b> → mở ChatGPT, chat mới → dán → gửi. ChatGPT trả lời "OK, paste the transcript."<br>
+    ② Về trang BBC/VOA, copy đoạn transcript vừa nghe → dán vào ChatGPT → gửi.<br>
+    ③ Trả lời từng câu hỏi bằng 🎤, không kéo lên xem transcript.</div>
+    <div class="prompt" id="rlPrompt">${esc(P.realListen())}</div>
+    <div class="row"><button class="sm" id="rlCopy">📋 Copy prompt</button>
+    <a class="btn ghost sm" href="https://chatgpt.com/" target="_blank" rel="noopener" style="padding:5px 10px;font-size:13px">Mở ChatGPT</a></div></div>`;
   if(b.gt) h += `<div class="kw" style="background:#ecfdf5">🔊 <a class="btn ghost sm" href="https://translate.google.com/?sl=en&tl=vi&op=translate" target="_blank" rel="noopener" style="padding:4px 9px;font-size:12px">Mở Google Translate</a><span class="muted">Dán bài nghe, bấm 🔊</span></div>`;
   b.steps.forEach((s,i)=>{
     const k = part+i, done = !!log.done[k];
@@ -567,7 +595,7 @@ function rMore(){
       <div class="row"><button id="exp">⬇️ Xuất file</button><button class="ghost" id="imp">⬆️ Nhập file</button></div></div>
     <div class="card"><h2>ℹ️ Cách dùng nhanh</h2><ul class="list">
       <li>Bấm nút <b>📋 Sói…</b> để copy từ khóa kèm chủ đề, chunks và lỗi gần đây, rồi dán vào ChatGPT.</li>
-      <li>Listening T3, T6: ChatGPT tạo bài, nghe bằng Google Translate. T5: nghe clip thật (BBC/VOA/TED-Ed), dán transcript sau từ khóa.</li>
+      <li>Listening T3, T6: ChatGPT tạo bài, nghe bằng Google Translate. T5: nghe ở BBC/VOA, gửi ChatGPT prompt trước, transcript sau (2 tin nhắn).</li>
       <li>Review, Free talk, Chủ Nhật: dùng nút <b>Copy prompt</b>.</li>
       <li>Nói bằng nút 🎤 hoặc chế độ Voice của ChatGPT, không gõ.</li>
       <li>Mỗi ngày tối đa <b>${LIMIT_INPUT} chunks</b> từ Reading/Listening và <b>${LIMIT_SPEAK} pattern</b> từ Speaking.</li>
